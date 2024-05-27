@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Authentication</title>
+    <style>
+        body {
+            background-color: #f4f4f9;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #007BFF;
+        }
+
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .message {
+            margin-top: 20px;
+            color: #ff6347;
+        }
+
+        .link {
+            margin-top: 10px;
+        }
+
+        .link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .link a:hover {
+            text-decoration: underline;
+        }
+
+        .secured-content {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="auth-container">
+        <h1 id="form-title">Register</h1>
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button onclick="register()">Register</button>
+        <p class="link">Already have an account? <a href="#" onclick="showLoginForm()">Login here</a></p>
+        <p class="message" id="message"></p>
+    </div>
+
+    <div class="container secured-content" id="secured-content">
+        <h1>Welcome to the Secured Page</h1>
+        <p>This page is only accessible after logging in.</p>
+    </div>
+
+    <script>
+        function showLoginForm() {
+            document.getElementById('form-title').innerText = 'Login';
+            document.querySelector('button').innerText = 'Login';
+            document.querySelector('button').setAttribute('onclick', 'login()');
+            document.querySelector('.link').innerHTML = `Don't have an account? <a href="#" onclick="showRegisterForm()">Register here</a>`;
+        }
+
+        function showRegisterForm() {
+            document.getElementById('form-title').innerText = 'Register';
+            document.querySelector('button').innerText = 'Register';
+            document.querySelector('button').setAttribute('onclick', 'register()');
+            document.querySelector('.link').innerHTML = `Already have an account? <a href="#" onclick="showLoginForm()">Login here</a>`;
+        }
+
+        function register() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username && password) {
+                localStorage.setItem(username, password);
+                document.getElementById('message').innerText = 'Registration successful! Please login.';
+                showLoginForm();
+            } else {
+                document.getElementById('message').innerText = 'Please enter a valid username and password.';
+            }
+        }
+
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const storedPassword = localStorage.getItem(username);
+
+            if (storedPassword && storedPassword === password) {
+                document.getElementById('message').innerText = 'Login successful!';
+                showSecuredContent();
+            } else {
+                document.getElementById('message').innerText = 'Invalid username or password.';
+            }
+        }
+
+        function showSecuredContent() {
+            document.getElementById('auth-container').style.display = 'none';
+            document.getElementById('secured-content').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
